@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import GH from "../assets/gh.png";
-import LI from "../assets/linkedin.png";
+import { GH, LI } from "@/assets";
 
 const Navbar = () => {
   return (

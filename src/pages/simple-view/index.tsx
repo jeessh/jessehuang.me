@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Navbar from './components/navbar'
+import Navbar from './sections/navbar'
 
 const SimpleView = () => {
   return (
