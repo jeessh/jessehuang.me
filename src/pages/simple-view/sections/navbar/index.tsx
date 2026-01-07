@@ -9,13 +9,13 @@ const Navbar = () => {
         <NameHeader>Jesse Huang</NameHeader>
       </NameWrapper>
       <LinksWrapper>
-      <LinkItem to="github.com/jessejhuang" target="_blank" rel="noopener noreferrer">
+      <LinkItem to="https://www.github.com/jeessh" target="_blank" rel="noopener noreferrer">
           <LinkIcon src={GH} alt="GitHub" />
         </LinkItem>
-        <LinkItem to="linkedin.com/in/jessejhuang" target="_blank" rel="noopener noreferrer">
+        <LinkItem to="https://www.linkedin.com/in/huang-jesse" target="_blank" rel="noopener noreferrer">
           <LinkIcon src={LI} alt="LinkedIn" />
         </LinkItem>
-        <LinkItem to="/story">Story View</LinkItem>
+        <LinkItem to="/story">???</LinkItem>
       </LinksWrapper>
     </Container>
   );
@@ -26,6 +26,7 @@ const Container = styled.nav`
   justify-content: space-between;
   display: flex;
   position: sticky;
+  background-color: #a36161;
 `;
 
 const NameWrapper = styled(NavLink)`
