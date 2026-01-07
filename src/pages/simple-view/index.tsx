@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import Navbar from "./sections/navbar";
-import Hero from "./sections/hero";
+import Navbar from "./sections/1_navbar";
+import Hero from "./sections/2_hero";
+import Experience from "./sections/3_experience";
 
 const SimpleView = () => {
   return (
@@ -8,15 +9,17 @@ const SimpleView = () => {
       <Container>
         <Navbar />
         <Hero />
+        <Experience />
       </Container>
     </>
   );
 };
 
 const Container = styled.main`
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 `;
 
 export default SimpleView;

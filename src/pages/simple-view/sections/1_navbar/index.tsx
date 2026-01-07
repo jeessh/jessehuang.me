@@ -22,7 +22,8 @@ const Navbar = () => {
 };
 
 const Container = styled.nav`
-  min-width: 100dvw;
+  width: 100%;
+  box-sizing: border-box;
   justify-content: space-between;
   display: flex;
   position: sticky;
