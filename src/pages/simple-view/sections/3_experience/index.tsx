@@ -1,5 +1,3 @@
-import React from "react";
-import styled from "styled-components";
 import ExperienceCard from "./components/experience_card";
 import { experiences } from "./experiences";
 

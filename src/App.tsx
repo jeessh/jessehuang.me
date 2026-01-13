@@ -1,4 +1,3 @@
-import React from 'react'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import SimpleView from './pages/simple-view'
 import StoryView from './pages/story-view'
