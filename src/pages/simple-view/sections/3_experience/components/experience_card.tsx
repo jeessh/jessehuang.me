@@ -20,8 +20,9 @@ const ExperienceCard = ({
   return (
     <Wrapper>
       <Image src={logo} alt={alt} />
-      <h2>{company}</h2>
-      <h3>{role}</h3>
+      <RoleHeader>{role}</RoleHeader>
+
+      <CompanyHeader>{company}</CompanyHeader>
       <p>
         {start} - {end}
       </p>
@@ -34,6 +35,23 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Image = styled.img``;
+const Image = styled.img`
+  width: 64px;
+  height: 64px;
+`;
+
+const RoleHeader = styled.h3`
+  margin: 0;
+`;
+
+const CompanyHeader = styled.h3`
+  margin: 0;
+`;
+
+const DateHeader = styled.h3``;
+
+const DateLine = styled.div``;
+
+const ReturnLine = styled.div``;
 
 export default ExperienceCard;
