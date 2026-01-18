@@ -4,8 +4,8 @@ const Hero = () => {
   return (
     <Container>
       <TextWrapper>
-        <Header>hey im jesse</Header>
-        <Header>i make things for fun</Header>
+        <Header>hey i'm jesse </Header>
+        <Header>throwing random shit at things</Header>
       </TextWrapper>
     </Container>
   );
@@ -15,12 +15,24 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background-color: #9d9dcd;
   min-width: 100%;
-  min-height: 100vh;
+  min-height: 80vh;
 `;
 
-const TextWrapper = styled.div``;
+const TextWrapper = styled.div`
+  animation: slideInFromLeft 0.6s ease-out;
+
+  @keyframes slideInFromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+`;
 
 const Header = styled.h1``;
 

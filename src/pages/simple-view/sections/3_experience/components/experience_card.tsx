@@ -19,38 +19,66 @@ const ExperienceCard = ({
 }: ExperienceCardProps) => {
   return (
     <Wrapper>
-      <Image src={logo} alt={alt} />
-      <RoleHeader>{role}</RoleHeader>
-
-      <CompanyHeader>{company}</CompanyHeader>
-      <p>
-        {start} - {end}
-      </p>
+      <SideWrapper>
+        <Image src={logo} alt={alt} />
+        <InfoWrapper>
+          <Role>{role}</Role>
+          <Company>{company}</Company>
+        </InfoWrapper>
+      </SideWrapper>
+      <HorizontalLine />
+      <SideWrapper>
+        <Date>
+          {start} - {end}
+        </Date>
+      </SideWrapper>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  height: 48px;
+  margin: 24px 0;
+`;
+
+const SideWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  height: 100%;
 `;
 
 const Image = styled.img`
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
 `;
 
-const RoleHeader = styled.h3`
+const InfoWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+`;
+
+const Role = styled.h3`
+  margin-bottom: 4px;
+`;
+
+const Company = styled.h4`
   margin: 0;
 `;
 
-const CompanyHeader = styled.h3`
-  margin: 0;
+const Date = styled.h4`
 `;
 
-const DateHeader = styled.h3``;
-
-const DateLine = styled.div``;
+const HorizontalLine = styled.div`
+  background-color: #222222;
+  height: 2px;
+  flex: 1;
+  margin: 0 16px;
+`;
 
 const ReturnLine = styled.div``;
 

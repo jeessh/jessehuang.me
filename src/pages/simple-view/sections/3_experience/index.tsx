@@ -1,9 +1,10 @@
 import ExperienceCard from "./components/experience_card";
 import { experiences } from "./experiences";
+import styled from "styled-components";
 
 const Experience = () => {
   return (
-    <section>
+    <Container>
       {experiences.map((exp, index) => (
         <ExperienceCard
           key={index}
@@ -15,8 +16,17 @@ const Experience = () => {
           end={exp.end}
         />
       ))}
-    </section>
+    </Container>
   );
 };
+
+const Container = styled.section`
+
+`;
+
+const SectionTitle = styled.h2`
+  margin-bottom: 16px;
+`;
+
 
 export default Experience;
