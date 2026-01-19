@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { projects } from './projects'
 
@@ -8,56 +8,60 @@ const Projects = () => {
 
   const currentProject = projects.find(p => p.id === selectedProjectId)
   const currentSlide = currentProject?.slides.find(s => s.id === selectedSlideId)
+  const totalSlides = currentProject?.slides.length || 0
+
+  // Auto-scroll every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSelectedSlideId(prev => {
+        const nextSlide = prev >= totalSlides ? 1 : prev + 1
+        return nextSlide
+      })
+    }, 10000)
+
+    return () => clearInterval(interval)
+  }, [totalSlides])
+
+  // Reset to first slide when changing projects
+  const handleProjectChange = (projectId: number) => {
+    setSelectedProjectId(projectId)
+    setSelectedSlideId(1)
+  }
 
   return (
     <Container>
-      <ProjectTabs>
+      <ContactSheet>
         {projects.map(project => (
-          <Tab
+          <ContactFrame
             key={project.id}
             $active={project.id === selectedProjectId}
-            onClick={() => {
-              setSelectedProjectId(project.id)
-              setSelectedSlideId(1)
-            }}
+            onClick={() => handleProjectChange(project.id)}
           >
-            {project.name}
-          </Tab>
+            <FrameContent>
+              <ProjectName>{project.name}</ProjectName>
+              <ProjectCategory>{project.category}</ProjectCategory>
+            </FrameContent>
+          </ContactFrame>
         ))}
-      </ProjectTabs>
+      </ContactSheet>
 
-      <ContentArea>
-        <FilmRoll>
-          <FilmRollHeader>Film Roll</FilmRollHeader>
-          <FilmStrip>
-            {currentProject?.slides.map(slide => (
-              <FilmFrame
-                key={slide.id}
-                $active={slide.id === selectedSlideId}
-                onClick={() => setSelectedSlideId(slide.id)}
-              >
-                <FrameNumber>{slide.id}</FrameNumber>
-                <FramePreview>
-                  <FrameTitle>{slide.title}</FrameTitle>
-                </FramePreview>
-              </FilmFrame>
-            ))}
-          </FilmStrip>
-        </FilmRoll>
+      <MainDisplay>
+        <SlideContent>
+          <SlideTitle>{currentSlide?.title}</SlideTitle>
+          <SlideDescription>{currentSlide?.description}</SlideDescription>
+          <SlideBody>{currentSlide?.content}</SlideBody>
+        </SlideContent>
 
-        <MainScreen>
-          <ProjectInfo>
-            <ProjectName>{currentProject?.name}</ProjectName>
-            <ProjectCategory>{currentProject?.category}</ProjectCategory>
-          </ProjectInfo>
-          
-          <SlideContent>
-            <SlideTitle>{currentSlide?.title}</SlideTitle>
-            <SlideDescription>{currentSlide?.description}</SlideDescription>
-            <SlideBody>{currentSlide?.content}</SlideBody>
-          </SlideContent>
-        </MainScreen>
-      </ContentArea>
+        <ProgressIndicator>
+          {currentProject?.slides.map(slide => (
+            <Dot
+              key={slide.id}
+              $active={slide.id === selectedSlideId}
+              onClick={() => setSelectedSlideId(slide.id)}
+            />
+          ))}
+        </ProgressIndicator>
+      </MainDisplay>
     </Container>
   )
 }
@@ -65,171 +69,93 @@ const Projects = () => {
 const Container = styled.section`
   padding: 4rem 2rem;
   min-height: 100vh;
-`
-
-const ProjectTabs = styled.div`
   display: flex;
-  gap: 1rem;
-  justify-content: flex-end;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 4rem;
 `
 
-const Tab = styled.button<{ $active: boolean }>`
-  padding: 0.75rem 1.5rem;
-  background: ${props => props.$active ? '#2a2a2a' : 'transparent'};
-  color: ${props => props.$active ? '#fff' : '#6a6a6a'};
-  border: 2px solid ${props => props.$active ? '#2a2a2a' : '#3a3a3a'};
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: ${props => props.$active ? '#2a2a2a' : '#1a1a1a'};
-    color: #fff;
-    border-color: #2a2a2a;
-  }
-`
-
-const ContentArea = styled.div`
+const ContactSheet = styled.div`
   display: grid;
-  grid-template-columns: 250px 1fr;
-  gap: 3rem;
-  align-items: start;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1rem;
   }
 `
 
-const FilmRoll = styled.div`
-  background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-`
-
-const FilmRollHeader = styled.h3`
-  color: #fff;
-  font-size: 1rem;
-  margin: 0 0 1.5rem 0;
-  text-align: center;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-`
-
-const FilmStrip = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-`
-
-const FilmFrame = styled.div<{ $active: boolean }>`
-  background: ${props => props.$active ? '#3a3a3a' : '#222'};
-  border: 3px solid ${props => props.$active ? '#646cff' : '#333'};
-  border-radius: 8px;
-  padding: 1rem;
+const ContactFrame = styled.div<{ $active: boolean }>`
+  background: transparent;
+  border: 1px solid ${props => props.$active ? '#3a3a3a' : '#e0e0e0'};
+  border-radius: 4px;
+  padding: 2rem 1.5rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   position: relative;
 
   &:hover {
-    background: #3a3a3a;
-    border-color: #646cff;
-    transform: translateX(4px);
-  }
-
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    background: #444;
-    border-radius: 50%;
-  }
-
-  &::before {
-    top: 50%;
-    left: -16px;
-    transform: translateY(-50%);
-  }
-
-  &::after {
-    top: 50%;
-    right: -16px;
-    transform: translateY(-50%);
+    border-color: #3a3a3a;
   }
 `
 
-const FrameNumber = styled.div`
-  font-size: 0.75rem;
-  color: #888;
-  font-family: monospace;
-  margin-bottom: 0.5rem;
+const FrameContent = styled.div`
+  position: relative;
+  z-index: 1;
 `
 
-const FramePreview = styled.div`
-  aspect-ratio: 4/3;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem;
+const ProjectName = styled.h3`
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  color: ${props => props.theme.$active ? '#1a1a1a' : '#4a4a4a'};
+  font-weight: 600;
+  transition: color 0.2s ease;
+
+  ${ContactFrame}:hover & {
+    color: #1a1a1a;
+  }
+
+  ${ContactFrame}[data-active="true"] &,
+  ${props => props.theme.$active && `color: #1a1a1a;`}
 `
 
-const FrameTitle = styled.span`
-  color: #fff;
+const ProjectCategory = styled.p`
+  margin: 0;
   font-size: 0.85rem;
-  font-weight: 500;
-  text-align: center;
+  color: #999;
+  font-weight: 400;
 `
 
-const MainScreen = styled.div`
-  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-  border-radius: 12px;
+const MainDisplay = styled.div`
+  background: transparent;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
   padding: 3rem;
-  min-height: 500px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   @media (max-width: 768px) {
     padding: 2rem;
   }
 `
 
-const ProjectInfo = styled.div`
-  margin-bottom: 2rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 2px solid #d0d0d0;
-`
-
-const ProjectName = styled.h2`
-  margin: 0 0 0.5rem 0;
-  font-size: 2rem;
-  color: #1a1a1a;
-  font-weight: 700;
-`
-
-const ProjectCategory = styled.p`
-  margin: 0;
-  font-size: 1rem;
-  color: #6a6a6a;
-  font-weight: 500;
-`
-
 const SlideContent = styled.div`
   color: #1a1a1a;
+  flex: 1;
 `
 
 const SlideTitle = styled.h3`
   margin: 0 0 1rem 0;
-  font-size: 1.5rem;
-  color: #2a2a2a;
+  font-size: 1.75rem;
+  color: #1a1a1a;
   font-weight: 600;
 `
 
@@ -242,8 +168,31 @@ const SlideDescription = styled.p`
 
 const SlideBody = styled.div`
   font-size: 0.95rem;
-  color: #3a3a3a;
+  color: #6a6a6a;
   line-height: 1.8;
+`
+
+const ProgressIndicator = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2.5rem;
+`
+
+const Dot = styled.button<{ $active: boolean }>`
+  width: ${props => props.$active ? '24px' : '8px'};
+  height: 8px;
+  background: ${props => props.$active ? '#3a3a3a' : '#d0d0d0'};
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+
+  &:hover {
+    background: #3a3a3a;
+  }
 `
 
 export default Projects

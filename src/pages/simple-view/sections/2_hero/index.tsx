@@ -4,7 +4,7 @@ const Hero = () => {
   return (
     <Container>
       <TextWrapper>
-        <Header>hey i'm jesse </Header>
+        <Header>hey, i'm jesse 🤙</Header>
         <Header>throwing random shit at things</Header>
       </TextWrapper>
     </Container>
