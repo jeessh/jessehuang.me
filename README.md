@@ -10,3 +10,6 @@ easy view of my xp
 
 ### For Fun
 fun view of everything
+
+cred to htn:
+optimize image: node scripts/image-optim.cjs
