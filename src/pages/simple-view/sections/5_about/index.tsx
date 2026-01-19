@@ -51,10 +51,26 @@ const About = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [frameImages.length])
 
+  // Calculate smooth zoom transition
+  // Start transitioning at 20% (frame 15) and complete by 80% (frame 58)
+  const transitionStart = frameImages.length * 0.2
+  const transitionEnd = frameImages.length * 0.8
+  
+  let zoomProgress = 0
+  if (currentFrame >= transitionStart && currentFrame <= transitionEnd) {
+    zoomProgress = (currentFrame - transitionStart) / (transitionEnd - transitionStart)
+  } else if (currentFrame > transitionEnd) {
+    zoomProgress = 1
+  }
+
   return (
     <Container ref={containerRef}>
       <StickyCanvas>
-        <FrameImage src={frameImages[currentFrame]} alt={`Frame ${currentFrame}`} />
+        <FrameImage 
+          src={frameImages[currentFrame]} 
+          alt={`Frame ${currentFrame}`}
+          $zoomProgress={zoomProgress}
+        />
       </StickyCanvas>
     </Container>
   )
@@ -81,13 +97,14 @@ const StickyCanvas = styled.div`
   overflow: hidden;
 `
 
-const FrameImage = styled.img`
+const FrameImage = styled.img<{ $zoomProgress: number }>`
   width: 100%;
-  height: auto;
-  min-height: 100%;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
   object-position: center;
   user-select: none;
+  transform: scale(${props => 1 + (props.$zoomProgress * 0.5)});
+  transition: transform 0.1s ease-out;
 `
 
 export default About

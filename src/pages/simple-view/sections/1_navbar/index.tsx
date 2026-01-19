@@ -53,6 +53,7 @@ const Container = styled.nav<{ $isScrolled: boolean }>`
   border-radius: 8px;
   background-color: #1a1a1a;
   padding: 12px;
+  z-index: 1000;
   border: 1px solid ${props => props.$isScrolled ? 'rgba(255, 255, 255, 0.1)' : 'transparent'};
   transition: border-color 0.3s ease, width 0.3s ease;
 `;
