@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-type ContactTypes = {
-  scrolled: boolean;
-};
-
-const Contact = (props: ContactTypes) => {
+const Contact = () => {
   const [isHovered, setIsHovered] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 

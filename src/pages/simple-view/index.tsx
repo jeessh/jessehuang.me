@@ -2,8 +2,9 @@ import styled from "styled-components";
 import Navbar from "./sections/1_navbar";
 import Hero from "./sections/2_hero";
 import Experience from "./sections/3_experience";
-import About from "./sections/4_about";
-import Contact from "./sections/5_contact";
+import Projects from "./sections/4_projects";
+import About from "./sections/5_about";
+import Contact from "./sections/6_contact";
 
 const SimpleView = () => {
   return (
@@ -13,8 +14,9 @@ const SimpleView = () => {
         <Content>
           <Hero />
           <Experience />
+          <Projects />
           <About />
-          <Contact scrolled={false} />
+          <Contact />
         </Content>
       </Container>
     </>
