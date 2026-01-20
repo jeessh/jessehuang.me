@@ -106,19 +106,32 @@ const About = () => {
     opaqueOpacity = 0
   }
 
+  // Calculate collage opacity (fade in after frame 50)
+  const collageTransitionStart = 50
+  const collageTransitionEnd = 60
+  
+  let collageOpacity = 0
+  if (currentFrame >= collageTransitionStart && currentFrame <= collageTransitionEnd) {
+    collageOpacity = (currentFrame - collageTransitionStart) / (collageTransitionEnd - collageTransitionStart)
+  } else if (currentFrame > collageTransitionEnd) {
+    collageOpacity = 1
+  }
+
   return (
-    <Container ref={containerRef}>
+    <Container ref={containerRef} data-section="about">
       <StickyCanvas>
-        <TextPanel $opacity={textOpacity}>
-          <AboutText>
-            <p>I'm just a guy that loves exploring.</p>
-            <p>Whether it's diving into new technologies, building creative projects, or capturing moments through a lens, I'm always curious about what's next.</p>
-            <p>My journey has taken me through full-stack development, IoT engineering, and everything in between.</p>
-            <p>I believe in learning by doing, creating with purpose, and sharing the process along the way.</p>
-            <p>Down to explore with me?</p>
-            <p>(Or are you just as curious as me, about me?)</p>
-          </AboutText>
-        </TextPanel>
+        <TextOverlay $opacity={textOpacity}>
+          <TextPanel>
+            <AboutText>
+              <p>I'm just a guy that loves exploring.</p>
+              <p>Whether it's diving into new technologies, building creative projects, or capturing moments through a lens, I'm always curious about what's next.</p>
+              <p>My journey has taken me through full-stack development, IoT engineering, and everything in between.</p>
+              <p>I believe in learning by doing, creating with purpose, and sharing the process along the way.</p>
+              <p>Down to explore with me?</p>
+              <p>(Or are you just as curious as me, about me?)</p>
+            </AboutText>
+          </TextPanel>
+        </TextOverlay>
         <FrameImage 
           src={frameImages[currentFrame]} 
           alt={`Transparent frame ${currentFrame}`}
@@ -131,12 +144,16 @@ const About = () => {
           $opacity={opaqueOpacity}
           style={{ zIndex: 101 }}
         />
+        <CollageContainer $opacity={collageOpacity}>
+          {/* Add your collage images here */}
+          <CollagePlaceholder>Collage Coming Soon</CollagePlaceholder>
+        </CollageContainer>
       </StickyCanvas>
     </Container>
   )
 }
 
-const Container = styled.div`
+const Container = styled.section`
   position: relative;
   width: 100vw;
   left: 50%;
@@ -172,7 +189,25 @@ const StickyCanvas = styled.div`
   }
 `
 
-const TextPanel = styled.div<{ $opacity: number }>`
+const TextOverlay = styled.div<{ $opacity: number }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  opacity: ${props => props.$opacity};
+  transition: opacity 0.1s ease-out;
+  pointer-events: ${props => props.$opacity === 0 ? 'none' : 'auto'};
+
+  @media (max-width: 768px) {
+    position: relative;
+    opacity: 1;
+    pointer-events: auto;
+  }
+`
+
+const TextPanel = styled.div`
   position: absolute;
   left: 0;
   width: 50%;
@@ -181,19 +216,12 @@ const TextPanel = styled.div<{ $opacity: number }>`
   align-items: center;
   justify-content: center;
   height: 100%;
-  z-index: 50;
-  transition: opacity 0.1s ease-out;
-
-  @media (min-width: 769px) {
-    opacity: ${props => props.$opacity};
-  }
 
   @media (max-width: 768px) {
     position: relative;
     width: 100%;
     padding: 2rem;
     background: rgba(255, 255, 255, 0.95);
-    opacity: 1;
   }
 `
 
@@ -231,6 +259,36 @@ const FrameImage = styled.img<{ $zoomProgress: number; $opacity?: number }>`
   @media (max-width: 768px) {
     display: none;
   }
+`
+
+const CollageContainer = styled.div<{ $opacity: number }>`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: ${props => props.$opacity};
+  transition: opacity 0.3s ease-out;
+  z-index: 90;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-auto-rows: minmax(150px, auto);
+  gap: 0.5rem;
+  padding: 1rem;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`
+
+const CollagePlaceholder = styled.div`
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  color: #6a6a6a;
+  font-style: italic;
 `
 
 export default About

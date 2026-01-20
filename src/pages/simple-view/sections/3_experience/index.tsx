@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 const Experience = () => {
   return (
-    <Container>
+    <Container data-section="experience">
       <Clothesline position="top" />
       <Clothesline position="bottom" reverse />
       <PolaroidsWrapper>
@@ -29,7 +29,7 @@ const Experience = () => {
 };
 
 const Container = styled.section`
-  padding: 4rem 2rem;
+  padding: 8rem 2rem 12rem 2rem;
   position: relative;
 `;
 

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const Hero = () => {
   return (
-    <Container>
+    <Container data-section="hero">
       <TextWrapper>
         <Header>hey, i'm jesse 🤙</Header>
         <Header>throwing random shit at things</Header>

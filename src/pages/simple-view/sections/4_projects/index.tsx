@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { projects } from './projects'
+import * as assets from '@/assets'
 
 const Projects = () => {
   const [selectedProjectId, setSelectedProjectId] = useState(1)
@@ -29,28 +30,49 @@ const Projects = () => {
   }
 
   return (
-    <Container>
+    <Container data-section="projects">
       <ContactSheet>
-        {projects.map(project => (
+        {projects.map((project, index) => (
           <ContactFrame
             key={project.id}
             $active={project.id === selectedProjectId}
             onClick={() => handleProjectChange(project.id)}
           >
+            {project.coverImage && (
+              <CoverImage src={project.coverImage} alt={project.name} />
+            )}
             <FrameContent>
+              <ProjectNumber>{String(index + 1).padStart(2, '0')}</ProjectNumber>
               <ProjectName>{project.name}</ProjectName>
               <ProjectCategory>{project.category}</ProjectCategory>
+              <ProjectDateRange>{project.dateRange || '2024-2025'}</ProjectDateRange>
             </FrameContent>
           </ContactFrame>
         ))}
       </ContactSheet>
 
       <MainDisplay>
+        <NavButton 
+          $position="left"
+          onClick={() => setSelectedSlideId(prev => prev > 1 ? prev - 1 : totalSlides)}
+          disabled={totalSlides === 0}
+        >
+          ←
+        </NavButton>
+
         <SlideContent>
           <SlideTitle>{currentSlide?.title}</SlideTitle>
           <SlideDescription>{currentSlide?.description}</SlideDescription>
           <SlideBody>{currentSlide?.content}</SlideBody>
         </SlideContent>
+
+        <NavButton 
+          $position="right"
+          onClick={() => setSelectedSlideId(prev => prev >= totalSlides ? 1 : prev + 1)}
+          disabled={totalSlides === 0}
+        >
+          →
+        </NavButton>
 
         <ProgressIndicator>
           {currentProject?.slides.map(slide => (
@@ -61,14 +83,25 @@ const Projects = () => {
             />
           ))}
         </ProgressIndicator>
+
+        <FilmStrip>
+          {currentProject?.slides.slice(0, 4).map(slide => (
+            <FilmFrame
+              key={slide.id}
+              $active={slide.id === selectedSlideId}
+              onClick={() => setSelectedSlideId(slide.id)}
+            >
+              <FrameNumber>{String(slide.id).padStart(2, '0')}</FrameNumber>
+            </FilmFrame>
+          ))}
+        </FilmStrip>
       </MainDisplay>
     </Container>
   )
 }
 
 const Container = styled.section`
-  padding: 4rem 2rem;
-  min-height: 100vh;
+  padding: 8rem 2rem 4rem 2rem;
   display: flex;
   flex-direction: column;
   gap: 4rem;
@@ -90,43 +123,65 @@ const ContactSheet = styled.div`
 
 const ContactFrame = styled.div<{ $active: boolean }>`
   background: transparent;
-  border: 1px solid ${props => props.$active ? '#3a3a3a' : '#e0e0e0'};
-  border-radius: 4px;
-  padding: 2rem 1.5rem;
+  border: 1px solid #2a2a2a;
+  padding: 1.5rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   position: relative;
+  filter: grayscale(100%);
 
   &:hover {
-    border-color: #3a3a3a;
+    filter: grayscale(50%);
   }
+
+  ${props => props.$active && `
+    filter: grayscale(0%);
+  `}
+`
+
+const CoverImage = styled.img`
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  margin-bottom: 1rem;
 `
 
 const FrameContent = styled.div`
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`
+
+const ProjectNumber = styled.div`
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: 0.05em;
+  font-family: 'Courier New', monospace;
 `
 
 const ProjectName = styled.h3`
-  margin: 0 0 0.25rem 0;
-  font-size: 1.1rem;
-  color: ${props => props.theme.$active ? '#1a1a1a' : '#4a4a4a'};
+  margin: 0;
+  font-size: 1rem;
+  color: #1a1a1a;
   font-weight: 600;
-  transition: color 0.2s ease;
-
-  ${ContactFrame}:hover & {
-    color: #1a1a1a;
-  }
-
-  ${ContactFrame}[data-active="true"] &,
-  ${props => props.theme.$active && `color: #1a1a1a;`}
+  line-height: 1.3;
 `
 
 const ProjectCategory = styled.p`
   margin: 0;
-  font-size: 0.85rem;
-  color: #999;
+  font-size: 0.8rem;
+  color: #4a4a4a;
   font-weight: 400;
+`
+
+const ProjectDateRange = styled.div`
+  font-size: 0.75rem;
+  color: #6a6a6a;
+  font-family: 'Courier New', monospace;
+  margin-top: 0.25rem;
 `
 
 const MainDisplay = styled.div`
@@ -141,9 +196,47 @@ const MainDisplay = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative;
 
   @media (max-width: 768px) {
     padding: 2rem;
+  }
+`
+
+const NavButton = styled.button<{ $position: 'left' | 'right' }>`
+  position: absolute;
+  top: 50%;
+  ${props => props.$position}: 1rem;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 1px solid #d0d0d0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #3a3a3a;
+  transition: all 0.2s ease;
+  z-index: 10;
+
+  &:hover:not(:disabled) {
+    border-color: #3a3a3a;
+    background: #f5f5f5;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 768px) {
+    ${props => props.$position}: 0.5rem;
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
   }
 `
 
@@ -193,6 +286,63 @@ const Dot = styled.button<{ $active: boolean }>`
   &:hover {
     background: #3a3a3a;
   }
+`
+
+const FilmStrip = styled.div`
+  position: absolute;
+  bottom: 0;
+  transform: translateY(50%) translateX(-25%);
+  left: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+  background: #1a1a1a;
+  padding: 0.5rem;
+  border: 2px solid #1a1a1a;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 1px solid #4a4a4a;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    bottom: 0.5rem;
+  }
+`
+
+const FilmFrame = styled.button<{ $active: boolean }>`
+  width: 60px;
+  height: 60px;
+  background: ${props => props.$active ? '#f5f5f5' : '#2a2a2a'};
+  border: 1px solid ${props => props.$active ? '#1a1a1a' : '#4a4a4a'};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: relative;
+
+  &:hover {
+    background: #3a3a3a;
+  }
+
+  @media (max-width: 768px) {
+    width: 48px;
+    height: 48px;
+  }
+`
+
+const FrameNumber = styled.span`
+  font-size: 0.65rem;
+  font-family: 'Courier New', monospace;
+  color: #8a8a8a;
+  font-weight: 700;
 `
 
 export default Projects

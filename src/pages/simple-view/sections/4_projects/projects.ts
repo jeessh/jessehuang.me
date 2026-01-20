@@ -1,3 +1,5 @@
+import * as assets from '@/assets'
+
 export type ProjectSlide = {
   id: number
   title: string
@@ -10,14 +12,16 @@ export type Project = {
   id: number
   name: string
   category: string
+  coverImage?: string
   slides: ProjectSlide[]
 }
 
 export const projects: Project[] = [
   {
     id: 1,
-    name: "Project One",
-    category: "Web Development",
+    name: "proj_1",
+    category: "Hack The North",
+    coverImage: assets.COVER_HTN,
     slides: [
       {
         id: 1,
@@ -47,8 +51,9 @@ export const projects: Project[] = [
   },
   {
     id: 2,
-    name: "Project Two",
-    category: "Design",
+    name: "proj_2",
+    category: "UWBlueprint",
+    coverImage: assets.COVER_UWBP,
     slides: [
       {
         id: 1,
@@ -78,8 +83,9 @@ export const projects: Project[] = [
   },
   {
     id: 3,
-    name: "Project Three",
-    category: "Mobile App",
+    name: "proj_3",
+    category: "For Fun",
+    coverImage: assets.COVER_FUN,
     slides: [
       {
         id: 1,

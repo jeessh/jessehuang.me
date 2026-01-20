@@ -24,7 +24,7 @@ const Contact = () => {
           onMouseLeave={() => setIsHovered(false)}
           onClick={handleClick}
         >
-          let's get in touch {isOpen ? "📬" : isHovered ? "📭" : "📪"}
+          let's make something to remember {isOpen ? "📬" : isHovered ? "📭" : "📪"}
         </Heading>
         {isOpen && (
           <SocialsContainer>
