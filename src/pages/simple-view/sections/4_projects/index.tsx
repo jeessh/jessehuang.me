@@ -101,18 +101,17 @@ const Projects = () => {
 }
 
 const Container = styled.section`
-  padding: 8rem 2rem 4rem 2rem;
+  padding: 8rem 0 8rem 0;
   display: flex;
   flex-direction: column;
   gap: 4rem;
+  width: 100%;
 `
 
 const ContactSheet = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
-  max-width: 1000px;
-  margin: 0 auto;
   width: 100%;
 
   @media (max-width: 768px) {

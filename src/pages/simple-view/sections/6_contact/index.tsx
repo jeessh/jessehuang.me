@@ -48,17 +48,19 @@ const Contact = () => {
 
 const Container = styled.footer`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
-  margin: 4rem 2rem 10rem 2rem;
+  margin: 4rem 0 10rem 0;
   min-height: 200px;
+  width: 100%;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 1rem;
+  width: 100%;
 `;
 
 const Heading = styled.h2`
@@ -76,8 +78,8 @@ const SocialsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  justify-content: center;
-  max-width: 500px;
+  justify-content: flex-start;
+  max-width: 100%;
 `;
 
 const SocialBubble = styled.a`

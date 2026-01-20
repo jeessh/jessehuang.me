@@ -15,7 +15,7 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-width: 100%;
+  width: 100%;
   min-height: 80vh;
 `;
 
